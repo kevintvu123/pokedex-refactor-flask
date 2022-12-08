@@ -4,14 +4,24 @@ from ..models import Pokemon, db, Type, Item
 
 bp = Blueprint("pokemon", __name__, url_prefix="/api")
 
-
-def process_json(request):
-    content_type = request.headers.get("Content-Type")
-    if content_type == "application/json":
-        json = request.json
-        return json
-    else:
-        return "Content-Type not supported"
+types = [
+  "fire",
+  "electric",
+  "normal",
+  "ghost",
+  "psychic",
+  "water",
+  "bug",
+  "dragon",
+  "grass",
+  "fighting",
+  "ice",
+  "flying",
+  "poison",
+  "ground",
+  "rock",
+  "steel",
+];
 
 
 @bp.route("/pokemon")
@@ -26,10 +36,10 @@ def index():
                 "number": p.number,
                 "attack": p.attack,
                 "defense": p.defense,
-                "image_url": p.image_url,
+                "imageUrl": p.imageUrl,
                 "name": p.name,
                 "type": p.type.value,
-                "moves": p.moves,
+                "moves": [p.moves],
                 "encounter_rate": p.encounter_rate,
                 "catch_rate": p.catch_rate,
                 "captured": p.captured,
@@ -47,7 +57,7 @@ def get_one_pokemon(id):
 
 @bp.route("/pokemon", methods=["POST"])
 def post_pokemon():
-    body = process_json(request)
+    body = request.get_json()
     b_type = body["type"]
 
     p_type = Type[b_type]
@@ -86,7 +96,7 @@ def get_pokemon_items(id):
 
 @bp.route("/pokemon/<int:id>/items", methods=["POST"])
 def post_pokemon_items(id):
-    body = process_json(request)
+    body = request.get_json()
 
     item_info = {**body, "pokemon_id":int(id)}
     new_item = Item(**item_info)
@@ -96,3 +106,7 @@ def post_pokemon_items(id):
 
     return new_item.to_dict()
 
+
+@bp.route("/pokemon/types")
+def all_types():
+    return types

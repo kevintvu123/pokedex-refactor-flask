@@ -20,6 +20,8 @@ const PokemonDetail = () => {
     setEditItemId(null);
   }, [dispatch, pokemonId]);
 
+  console.log(pokemon.moves)
+
   if (!pokemon || !pokemon.moves) {
     return null;
   }

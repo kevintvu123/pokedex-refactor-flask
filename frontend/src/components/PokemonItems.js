@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { getItems, deleteItem } from "../store/items";
 
 const PokemonItems = ({ pokemon, setEditItemId }) => {
+  console.log(pokemon.items)
   const items = useSelector((state) => {
     if (!pokemon.items) return null;
     return pokemon.items.map(itemId => state.items[itemId]);
@@ -16,6 +17,8 @@ const PokemonItems = ({ pokemon, setEditItemId }) => {
   if (!items) {
     return null;
   }
+
+  console.log(items)
 
   return items.map((item) => (
     <tr key={item.id}>

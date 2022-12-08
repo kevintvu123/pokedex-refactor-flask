@@ -42,6 +42,23 @@ class Pokemon(db.Model):
     captured = db.Column(db.Boolean, default=False, nullable=False)
     items = db.relationship("Item", back_populates="pokemon")
 
+    def to_dict(self):
+        items = [item.to_dict() for item in self.items]
+        return dict(
+            id = self.id,
+            number = self.number,
+            attack = self.attack,
+            defense = self.defense,
+            image_url = self.image_url,
+            name = self.name,
+            type = self.type.value,
+            moves = self.moves,
+            encounter_rate = self.encounter_rate,
+            catch_rate = self.catch_rate,
+            captured = self.captured,
+            items = items
+        )
+
 
 class Item(db.Model):
     __tablename__ = "items"

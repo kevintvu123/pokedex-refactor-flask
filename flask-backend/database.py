@@ -11,7 +11,16 @@ with app.app_context():
     db.create_all()
     print("**CREATED ALL TABLES")
 
-    bulbasaur = Pokemon(number=1, attack=50, defense=50, image_url="https://shop7.webmodule.prestashop.net/pokedoge/11262-large_default/bulbasaur.jpg", name="Bulbasaur", type=Type.grass, moves="tackle")
+    bulbasaur = Pokemon(
+        number=1, 
+        attack=50, 
+        defense=50, 
+        image_url="https://shop7.webmodule.prestashop.net/pokedoge/11262-large_default/bulbasaur.jpg",
+        name="Bulbasaur", 
+        type=Type.grass, 
+        moves="tackle"
+        )
+        
     charizard = Pokemon(number=2, attack=25, defense=25, image_url="https://oyster.ignimgs.com/mediawiki/apis.ign.com/pokemon-switch/6/69/Charizard.jpg", name="Charizard", type=Type.fire, moves="scratch")
 
     

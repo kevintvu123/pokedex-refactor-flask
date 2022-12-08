@@ -36,7 +36,7 @@ def index():
                 "number": p.number,
                 "attack": p.attack,
                 "defense": p.defense,
-                "imageUrl": p.imageUrl,
+                "imagerl": p.imageUrl,
                 "name": p.name,
                 "type": p.type.value,
                 "moves": [p.moves],

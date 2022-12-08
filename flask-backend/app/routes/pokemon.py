@@ -1,4 +1,4 @@
-from flask import Blueprint, jsonify, request, redirect
+from flask import Blueprint, request, redirect
 from ..models import Pokemon, db, Type, Item
 
 
@@ -7,7 +7,7 @@ bp = Blueprint("pokemon", __name__, url_prefix="/api")
 
 def process_json(request):
     content_type = request.headers.get("Content-Type")
-    if content_type == 'application/json':
+    if content_type == "application/json":
         json = request.json
         return json
     else:
@@ -39,12 +39,16 @@ def index():
     return pokemon
 
 
-    
+@bp.route("/pokemon/<int:id>")
+def get_one_pokemon(id):
+    pokemon = Pokemon.query.get(id).to_dict()
+    return pokemon
+
 
 @bp.route("/pokemon", methods=["POST"])
 def post_pokemon():
     body = process_json(request)
-    b_type = body['type']
+    b_type = body["type"]
 
     p_type = Type[b_type]
 
@@ -54,12 +58,41 @@ def post_pokemon():
     db.session.add(new_pokemon)
     db.session.commit()
 
-    return "new pokemon created"
-
-    # return redirect(f"/pokemon/{new_pokemon.id}")
+    return redirect(f"{request.base_url}/{new_pokemon.id}")
 
 
-@bp.route("/pokemon/<int:id>")
-def get_one_pokemon(id):
+@bp.route("/pokemon/<int:id>", methods=["PUT"])
+def put_pokemon(id):
+
+    body = request.get_json()
+
+    pokemon = Pokemon.query.filter_by(id=int(id)).update(body)
+    db.session.commit()
+
+    edited_pokemon = Pokemon.query.get(id).to_dict()
+
+    return edited_pokemon
+
+
+@bp.route("/pokemon/<int:id>/items")
+def get_pokemon_items(id):
+
     pokemon = Pokemon.query.get(id).to_dict()
-    return pokemon
+
+    pokemon_items = pokemon["items"]
+
+    return pokemon_items
+
+
+@bp.route("/pokemon/<int:id>/items", methods=["POST"])
+def post_pokemon_items(id):
+    body = process_json(request)
+
+    item_info = {**body, "pokemon_id":int(id)}
+    new_item = Item(**item_info)
+
+    db.session.add(new_item)
+    db.session.commit()
+
+    return new_item.to_dict()
+
